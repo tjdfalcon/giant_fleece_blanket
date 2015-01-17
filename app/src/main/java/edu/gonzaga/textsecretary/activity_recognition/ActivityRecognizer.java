@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -22,6 +24,8 @@ public class ActivityRecognizer {
 	private DetectionRequester mDetectionRequester;
     private DetectionRemover mDetectionRemover;
     private Context mContext;
+    private SharedPreferences prefs;
+
 
     private ActivityRecognizer (Context context) {
         mContext = context;
@@ -101,13 +105,35 @@ public class ActivityRecognizer {
     }
 
     protected void raiseLowerDrivingConfidence(int activityType) {
+        prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
+        boolean isPassenger = prefs.getBoolean("isPassenger", false);
+
+        if(isPassenger){
+            if(activityType == DetectedActivity.STILL || activityType == DetectedActivity.ON_FOOT){
+                if(drivingConfidence < 0)
+                    drivingConfidence += 1;
+            }
+
+            else if(activityType == DetectedActivity.IN_VEHICLE || activityType == DetectedActivity.ON_BICYCLE){
+                drivingConfidence = -3;
+            }
+        }
+
+        else{
+            if (((activityType == DetectedActivity.IN_VEHICLE) || (activityType == DetectedActivity.ON_BICYCLE)) && (drivingConfidence < 3))
+                drivingConfidence += 1;
+
+            else if ((activityType != DetectedActivity.IN_VEHICLE) && (activityType != DetectedActivity.ON_BICYCLE) && (activityType != DetectedActivity.UNKNOWN) && (drivingConfidence > -3))
+                drivingConfidence -= 1;
+        }
+/*
         //if driving
         if (((activityType == DetectedActivity.IN_VEHICLE) || (activityType == DetectedActivity.ON_BICYCLE)) && (drivingConfidence < 3))
             drivingConfidence += 1;
         //if not driving and not unknown
         else if ((activityType != DetectedActivity.IN_VEHICLE) && (activityType != DetectedActivity.ON_BICYCLE) && (activityType != DetectedActivity.UNKNOWN) && (drivingConfidence > -2))
             drivingConfidence -= 1;
-
+*/
         Log.d(ActivityUtils.APPTAG, "driving confidence: " + drivingConfidence);
     }
 	

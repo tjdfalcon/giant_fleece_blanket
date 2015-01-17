@@ -1,16 +1,5 @@
 package edu.gonzaga.textsecretary;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
-import org.json.JSONObject;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -18,6 +7,17 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.util.Log;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONObject;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
 public class Register extends AsyncTask<Boolean, Void, Boolean> {
 	
@@ -29,7 +29,7 @@ public class Register extends AsyncTask<Boolean, Void, Boolean> {
     private JSONParser jsonParser = new JSONParser();
 
     //server URL:
-    private static final String LOGIN_URL = "http://gonzagakennelclub.com/textsecretary/register.php";
+    private static final String LOGIN_URL = "http://collinwalker.guru/textsecretary/register.php";
 
     //ids
     private static final String TAG_PAID = "paid";
